@@ -149,12 +149,14 @@ func (c *container) Put(name string, r io.Reader, size int64, metadata map[strin
 		return nil, errors.Wrap(err, "unable to create or update item, preparing metadata")
 	}
 
+	contentType := "text/html"
 	uploader := s3manager.NewUploaderWithClient(c.client)
 	_, err = uploader.Upload(&s3manager.UploadInput{
-		Bucket:   aws.String(c.name), // Required
-		Key:      aws.String(name),   // Required
-		Body:     r,
-		Metadata: mdPrepped, // map[string]*string
+		Bucket:      aws.String(c.name), // Required
+		Key:         aws.String(name),   // Required
+		Body:        r,
+		Metadata:    mdPrepped, // map[string]*string
+		ContentType: &contentType,
 	})
 
 	if err != nil {
