@@ -47,6 +47,7 @@ func (c *container) PreSignRequest(ctx context.Context, clientMethod stow.Client
 			Bucket:     aws.String(c.name),
 			Key:        aws.String(id),
 			ContentMD5: contentMD5,
+			Metadata:   map[string]*string{stow.FlyteContentMD5: contentMD5},
 		})
 	default:
 		return "", fmt.Errorf("unsupported client method [%v]", clientMethod.String())

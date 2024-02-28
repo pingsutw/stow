@@ -59,6 +59,8 @@ const (
 	ClientMethodPut
 )
 
+const FlyteContentMD5 = "flyteContentMD5"
+
 // IsCursorEnd checks whether the cursor indicates there are no
 // more items or not.
 func IsCursorEnd(cursor string) bool {
