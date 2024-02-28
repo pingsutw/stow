@@ -51,12 +51,15 @@ func (c *Container) PreSignRequest(_ context.Context, clientMethod stow.ClientMe
 		}
 	}
 
-	header := fmt.Sprintf("x-goog-meta-%s:%s", stow.FlyteContentMD5, params.ContentMD5)
+	var headers []string
+	if params.AddMetadata {
+		headers = []string{fmt.Sprintf("x-goog-meta-%s:%s", stow.FlyteContentMD5, params.ContentMD5)}
+	}
 	return c.Bucket().SignedURL(id, &storage.SignedURLOptions{
 		Method:  params.HttpMethod,
 		Expires: time.Now().Add(params.ExpiresIn),
 		MD5:     params.ContentMD5,
-		Headers: []string{header},
+		Headers: headers,
 	})
 }
 
