@@ -98,7 +98,7 @@ type PresignRequestParams struct {
 	ContentMD5  string
 	ExtraParams map[string]interface{}
 	HttpMethod  HttpMethod
-	AddMetadata bool
+	Metadata    map[string]string
 }
 
 // Container represents a container.
