@@ -43,12 +43,9 @@ func (c *container) PreSignRequest(ctx context.Context, clientMethod stow.Client
 			contentMD5 = aws.String(params.ContentMD5)
 		}
 
-		var metadata map[string]*string
+		metadata := make(map[string]*string)
 		for key, value := range params.Metadata {
-			if metadata == nil {
-				metadata = make(map[string]*string)
-			}
-			metadata[key] = aws.String(fmt.Sprintf("%v", value))
+			metadata[key] = aws.String(value)
 		}
 
 		req, _ = c.client.PutObjectRequest(&s3.PutObjectInput{
