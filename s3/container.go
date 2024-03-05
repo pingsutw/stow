@@ -32,7 +32,7 @@ func (c *container) PreSignRequest(ctx context.Context, clientMethod stow.Client
 	params stow.PresignRequestParams) (response stow.PresignResponse, err error) {
 
 	var req *request.Request
-	requestHeaders := make(map[string]string)
+	var requestHeaders map[string]string
 	switch clientMethod {
 	case stow.ClientMethodGet:
 		req, _ = c.client.GetObjectRequest(&s3.GetObjectInput{
@@ -47,10 +47,9 @@ func (c *container) PreSignRequest(ctx context.Context, clientMethod stow.Client
 
 		metadata := make(map[string]*string)
 
+		requestHeaders := map[string]string{"Content-Length": strconv.Itoa(len(params.ContentMD5)), "Content-MD5": params.ContentMD5}
 		if params.AddContentMD5Metadata {
 			metadata[stow.FlyteContentMD5] = aws.String(params.ContentMD5)
-			requestHeaders["Content-Length"] = strconv.Itoa(len(params.ContentMD5))
-			requestHeaders["Content-MD5"] = params.ContentMD5
 			requestHeaders[fmt.Sprintf("x-amz-meta-%s", stow.FlyteContentMD5)] = params.ContentMD5
 		}
 

@@ -53,11 +53,9 @@ func (c *Container) PreSignRequest(_ context.Context, clientMethod stow.ClientMe
 	}
 
 	headers := make([]string, 0, 1)
-	requestHeaders := make(map[string]string)
+	requestHeaders := map[string]string{"Content-Length": strconv.Itoa(len(params.ContentMD5)), "Content-MD5": params.ContentMD5}
 	if params.AddContentMD5Metadata {
 		headers = append(headers, fmt.Sprintf("x-goog-meta-%s: %s", stow.FlyteContentMD5, params.ContentMD5))
-		requestHeaders["Content-Length"] = strconv.Itoa(len(params.ContentMD5))
-		requestHeaders["Content-MD5"] = params.ContentMD5
 		requestHeaders[fmt.Sprintf("x-goog-meta-%s", stow.FlyteContentMD5)] = params.ContentMD5
 	}
 
