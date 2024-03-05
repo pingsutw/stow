@@ -70,7 +70,8 @@ func (c *container) PreSignRequest(ctx context.Context, method stow.ClientMethod
 
 	requestHeaders := make(map[string]string)
 	if params.AddContentMD5Metadata {
-		requestHeaders := map[string]string{"Content-Length": strconv.Itoa(len(params.ContentMD5)), "Content-MD5": params.ContentMD5}
+		requestHeaders["Content-Length"] = strconv.Itoa(len(params.ContentMD5))
+		requestHeaders["Content-MD5"] = params.ContentMD5
 		requestHeaders[fmt.Sprintf("x-ms-meta-%s", stow.FlyteContentMD5)] = params.ContentMD5
 		requestHeaders["x-ms-blob-type"] = "BlockBlob" // https://learn.microsoft.com/en-us/rest/api/storageservices/put-blob?tabs=microsoft-entra-id#remarks
 	}
