@@ -68,9 +68,12 @@ func (c *container) PreSignRequest(ctx context.Context, method stow.ClientMethod
 	// Create the SAS URL for the resource you wish to access, and append the SAS query parameters.
 	qp := sasQueryParams.Encode()
 
-	requestHeaders := map[string]string{"Content-Length": strconv.Itoa(len(params.ContentMD5)), "Content-MD5": params.ContentMD5}
-	requestHeaders[fmt.Sprintf("x-ms-meta-%s", stow.FlyteContentMD5)] = params.ContentMD5
-	requestHeaders["x-ms-blob-type"] = "BlockBlob" // https://learn.microsoft.com/en-us/rest/api/storageservices/put-blob?tabs=microsoft-entra-id#remarks
+	requestHeaders := make(map[string]string)
+	if params.AddContentMD5Metadata {
+		requestHeaders := map[string]string{"Content-Length": strconv.Itoa(len(params.ContentMD5)), "Content-MD5": params.ContentMD5}
+		requestHeaders[fmt.Sprintf("x-ms-meta-%s", stow.FlyteContentMD5)] = params.ContentMD5
+		requestHeaders["x-ms-blob-type"] = "BlockBlob" // https://learn.microsoft.com/en-us/rest/api/storageservices/put-blob?tabs=microsoft-entra-id#remarks
+	}
 
 	return stow.PresignResponse{Url: fmt.Sprintf("%s/%s?%s", c.client.URL(), blobName, qp), RequiredRequestHeaders: requestHeaders}, nil
 }
