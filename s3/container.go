@@ -46,7 +46,6 @@ func (c *container) PreSignRequest(ctx context.Context, clientMethod stow.Client
 		}
 
 		metadata := make(map[string]*string)
-
 		requestHeaders := map[string]string{"Content-Length": strconv.Itoa(len(params.ContentMD5)), "Content-MD5": params.ContentMD5}
 		if params.AddContentMD5Metadata {
 			metadata[stow.FlyteContentMD5] = aws.String(params.ContentMD5)
